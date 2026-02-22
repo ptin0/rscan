@@ -1,0 +1,7 @@
+[workspace]
+resolver = "2"
+
+members = [ "mock_device",
+    "scanner_comms",
+    "slint_gui"
+, "true_mock"]

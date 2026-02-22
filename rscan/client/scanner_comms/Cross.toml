@@ -1,0 +1,4 @@
+[build]
+build-std = false
+default-target = "thumbv7em-none-eabihf"
+rustflags = [ "-Zlocation-detail=none" ]

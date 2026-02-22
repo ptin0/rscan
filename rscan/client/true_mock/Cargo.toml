@@ -1,0 +1,9 @@
+[package]
+name = "true_mock"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+scanner_comms = { path = "../scanner_comms" }
+serialport = { version = "4.3.0" }
+anyhow = { version = "1.0" }

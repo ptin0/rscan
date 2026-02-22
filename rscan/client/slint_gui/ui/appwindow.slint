@@ -1,0 +1,158 @@
+// Copyright (C) 2024 pitau
+// 
+// This program is free software: you can redistribute it and/or modify
+// it under the terms of the GNU Affero General Public License as
+// published by the Free Software Foundation, either version 3 of the
+// License, or (at your option) any later version.
+// 
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU Affero General Public License for more details.
+// 
+// You should have received a copy of the GNU Affero General Public License
+// along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+
+import { AboutSlint, Button, VerticalBox, GridBox, HorizontalBox, LineEdit, ProgressIndicator } from "std-widgets.slint";
+component AngleEdit inherits LineEdit {
+    input-type: decimal;
+    horizontal-alignment: right;
+    //font-size: 14pt;
+    height: 24px;
+}
+
+component TextLabel inherits Text {
+    text: "label";
+    //font-size: 14pt;
+    height: 15pt;
+}
+
+
+component InOuts {
+    GridLayout {
+        //Row {
+        //    TextLabel { text: "output: "; height: 15pt; }
+        //    Button {
+        //        text: "select";
+        //        //width: 15px;
+        //    }
+        //    TextLabel { text: "/home/pitau/some.out"; col: 3; height: 15pt; colspan: 2; }
+        //}
+        //Row {
+        //    TextLabel { text: "com: "; height: 15pt; }
+        //    LineEdit {
+        //        input-type: text;
+        //        height: 24px;
+        //        //font-size: 14pt;
+        //        colspan: 2;
+        //    }
+        //    Button { text: "Enter"; col: 4; }
+        //}
+        Row {
+            TextLabel { text: "status: "; height: 15pt; colspan: 5; }
+        }
+    }
+}
+
+export component MainAppWindow {
+    callback send_abort_pack();
+    callback pass_z_rot( string );
+    callback pass_x_rot( string );
+    callback read_steps_update( string );
+    callback read_lines_update( string );
+    callback send_prog_pack();
+    in property <float> progress: 0.0;
+    in property <string> raw_progress: "0/123";
+    VerticalBox {
+    GridLayout {
+        Row {
+            HorizontalBox {
+                height: 30px;
+                TextLabel { text: "Z"; } 
+                AngleEdit {
+                    accepted(number) => {
+                        root.pass_z_rot( number );
+                    }
+                }
+            }
+        }
+        Row {
+            HorizontalBox {
+                height: 30px;
+                TextLabel { text: "X"; } 
+                AngleEdit {
+                    accepted(number) => {
+                        root.pass_x_rot( number );
+                    }
+                }
+            }
+        }
+    }
+    InOuts {}
+    // Programator
+    GridLayout {
+        Row {
+            TextLabel { text: "Number of point steps: "; }
+            LineEdit {
+                input-type: number;
+                height: 24px;
+                col: 2;
+                edited(number) => {
+                    root.read_steps_update(number);
+                }
+            }
+            //TextLabel { text: "resolution: "; col: 3; }
+            //LineEdit {
+            //    input-type: number;
+            //    height: 24px;
+            //    col: 4;
+            //}
+        }
+        Row {
+            TextLabel { text: "Number of line steps: "; }
+            LineEdit {
+                input-type: number;
+                height: 24px;
+                col: 2;
+                edited(number) => {
+                    root.read_lines_update(number);
+                }
+            }
+            //TextLabel { text: "resolution: "; }
+            //LineEdit {
+            //    input-type: number;
+            //    height: 24px;
+            //    col: 4;
+            //}
+        }
+        // Progress
+        Row {
+            ProgressIndicator {
+                progress: root.progress;
+                colspan: 9;
+            }
+            TextLabel {
+                text: root.raw_progress;
+                col: 10;
+            }
+        }
+    }
+    // Start/Abort
+    GridBox {
+        Row {
+            Button { text: "Start";
+                clicked => {
+                    root.send_prog_pack();
+                }
+            }
+            Button {
+                text: "Abort";
+                clicked => {
+                    root.send_abort_pack();
+                }
+            }
+        }
+    }
+    }
+}

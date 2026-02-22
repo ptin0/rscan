@@ -1,0 +1,10 @@
+[package]
+name = "mock_device"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+tokio = { version = "1", features = [ "full" ] }
+tokio-serial = { version = "5.4" }
+scanner_comms = { path = "../scanner_comms" }
+anyhow = { version = "1.0" }
